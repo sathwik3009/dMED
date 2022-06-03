@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title></title>
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+    
+    <script src="js/bundle.js"></script>
+
+
+    <!-- Custom CSS -->
+    <style>
+    .panel-heading{
+        margin-bottom: 20px;
+    }
+    .navbar{
+        margin-bottom: 70px;
+    }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand text-white" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-boxes" viewBox="0 0 16 16">
+        <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>
+      </svg>  dMED</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav mr-auto">
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="./index.html">Login</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link text-white" href="./register.html">Register</a>
+                  </li>
+              </ul>
+          </div>
+      
+      </nav>
+      <div class="alert alert-warning text-center" style="display: none;">
+        <strong>Warning!</strong> Unregistered user. Click <a href="./register.html">here</a> to register.
+    
+    </div>
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-md-9 col-lg-6 col-xl-5">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+              class="img-fluid" alt="Sample image">
+          </div>
+          <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <form>
+              <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                <p class="lead fw-normal mb-0 me-3">
+                <br>Medical records are very personal.
+    Do not compromise on the privacy of your data.
+    dMed saves your data securely on the blockchain.
+    Your data is safe with us.</p>
+              </div>
+    
+              <div class="text-center text-lg-start mt-4 pt-2">
+                <button type="button" class="btn btn-primary btn-lg"
+                  style="padding-left: 2.5rem; padding-right: 2.5rem;" onclick="login()">Login</button>
+                <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="./register.html"
+                    class="link-danger">Register</a></p>
+              </div>
+    
+            </form>
+          </div>
+        </div>
+      </div>
+    
+    
+    
+    
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/web3.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+
+        function login(){
+            $(".alert-warning").hide();
+
+            publicKey= web3.currentProvider.selectedAddress;
+            console.log(publicKey);
+            contractInstance.get_patient_list(function(error, result){
+                if(!error){
+                    var PatientList = result;
+                    for(var i = 0; i < PatientList.length; i++) {
+                        if (publicKey.toLowerCase() == PatientList[i]) {
+                            location.href = "./patient.html?key=" + publicKey;
+                        }
+                    }
+                    
+                } else {
+                    console.log(error);
+                    console.log("Invalid User!");
+                    $(".alert-warning").show();
+                }
+            });
+
+            contractInstance.get_doctor_list(function(error, result){
+                if(!error){
+                    var DoctorList = result;
+                    for(var i = 0; i < DoctorList.length; i++) {
+                        if (publicKey.toLowerCase() == DoctorList[i]) {
+                            location.href = "./doctor.html?key=" + publicKey;
+                        }
+                    }
+                    
+                } else {
+                    console.log(error);
+                    $(".alert-warning").show();
+                }
+            }); 
+            
+            console.log("Invalid User!");
+            $(".alert-warning").show();
+        }
+
+     
+        
+    </script>
+
+</body>
+
+</html>
